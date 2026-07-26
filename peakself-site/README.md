@@ -35,4 +35,4 @@ Open `netlify/functions/chat.js` and edit the `SYSTEM_PROMPT` string to change i
 ## Cost control (optional but recommended)
 Since this runs on your API key, consider:
 - Setting a monthly spend cap in the Anthropic console
-- Adding simple rate-limiting later if the site gets real traffic (e.g. limit to N messages per visitor per session). 
+- Adding simple rate-limiting later if the site gets real traffic (e.g. limit to N messages per visitor per session)

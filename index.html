@@ -1,1 +1,579 @@
-Actually — better idea. Pasting the full site code here would be huge and error-prone to copy correctly. You already have the complete files from the zip I gave you earlier. Let's just upload those directly instead.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeakSelf — Your All-in-One Health Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pine: #0B2E23;
+    --pine-deep: #071F18;
+    --mint-white: #F5FAF6;
+    --lime: #C6F24D;
+    --lime-dim: #9FCB3A;
+    --coral: #FF5A36;
+    --ink: #12201A;
+    --ink-soft: rgba(18,32,26,0.65);
+    --paper-line: rgba(11,46,35,0.12);
+    --dark-line: rgba(245,250,246,0.14);
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    background: var(--mint-white);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  a{ text-decoration:none; color:inherit; }
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+  /* Scroll pulse progress bar */
+  .pulse-progress{
+    position: fixed; top:0; left:0; height:3px; width:100%;
+    background: transparent; z-index: 999;
+  }
+  .pulse-progress-fill{
+    height:100%; width:0%; background: var(--lime);
+    transition: width 0.1s linear;
+  }
+
+  nav{
+    position: sticky; top:0; z-index: 100;
+    background: rgba(11,46,35,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--dark-line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height: 76px;
+  }
+  .logo{
+    font-family:'Fraunces', serif; font-size: 22px; font-weight: 700;
+    color: var(--mint-white); letter-spacing: -0.02em;
+  }
+  .logo span{ color: var(--lime); }
+  nav .links{ display:flex; gap: 36px; }
+  nav .links a{
+    color: rgba(245,250,246,0.75); font-size: 14.5px; font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  nav .links a:hover{ color: var(--mint-white); }
+  nav .cta{
+    background: var(--lime); color: var(--pine-deep);
+    padding: 10px 22px; border-radius: 100px; font-weight: 700; font-size: 14px;
+  }
+
+  /* HERO */
+  .hero{
+    background: radial-gradient(ellipse 120% 80% at 15% 0%, #123f2f 0%, var(--pine) 45%, var(--pine-deep) 100%);
+    color: var(--mint-white);
+    position: relative;
+    padding: 120px 0 90px;
+    overflow: hidden;
+  }
+  .hero .wrap{ position:relative; z-index:2; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--lime); border: 1px solid rgba(198,242,77,0.35);
+    padding: 8px 16px; border-radius: 100px; margin-bottom: 28px;
+  }
+  .hero h1{
+    font-size: clamp(42px, 6.5vw, 84px);
+    line-height: 1.02;
+    max-width: 850px;
+    margin-bottom: 26px;
+  }
+  .hero h1 em{ font-style: italic; color: var(--lime); }
+  .hero p.sub{
+    font-size: 19px; max-width: 560px; color: rgba(245,250,246,0.78);
+    line-height: 1.6; margin-bottom: 40px;
+  }
+  .btn-row{ display:flex; gap:16px; align-items:center; flex-wrap: wrap; }
+  .btn-primary{
+    background: var(--lime); color: var(--pine-deep); font-weight: 700; font-size: 15.5px;
+    padding: 16px 30px; border-radius: 100px; display:inline-block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 12px 24px rgba(198,242,77,0.25); }
+  .btn-ghost{
+    color: var(--mint-white); font-weight: 600; font-size: 15px;
+    padding: 16px 8px; display:inline-flex; align-items:center; gap:8px;
+    border-bottom: 1px solid rgba(245,250,246,0.3);
+  }
+
+  /* Pulse line SVG in hero */
+  .pulse-wrap{ margin-top: 70px; opacity: 0.9; }
+  .pulse-line{ width: 100%; height: 70px; }
+  .pulse-path{
+    fill:none; stroke: var(--lime); stroke-width:2.5;
+    stroke-dasharray: 900; stroke-dashoffset: 900;
+    animation: draw 2.8s ease-out forwards 0.4s;
+  }
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+
+  .stat-strip{
+    display:flex; gap: 48px; margin-top: 56px; flex-wrap: wrap;
+    border-top: 1px solid var(--dark-line); padding-top: 32px;
+  }
+  .stat-strip div{ min-width: 120px; }
+  .stat-strip .num{ font-family:'Fraunces', serif; font-size: 30px; font-weight: 600; color: var(--lime); }
+  .stat-strip .label{ font-size: 13px; color: rgba(245,250,246,0.6); margin-top: 4px; }
+
+  /* SECTION generic */
+  section{ padding: 110px 0; }
+  .section-head{ max-width: 620px; margin-bottom: 64px; }
+  .kicker{
+    font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--lime-dim); margin-bottom: 16px; display:block;
+  }
+  .light .kicker{ color: var(--coral); }
+  section h2{ font-size: clamp(32px, 4vw, 48px); line-height: 1.1; color: var(--ink); }
+  .dark h2, .dark p{ color: var(--mint-white); }
+  .dark .section-head p{ color: rgba(245,250,246,0.7); }
+  section .section-head p{ font-size: 17px; color: var(--ink-soft); margin-top: 14px; line-height: 1.6; }
+
+  .dark{ background: var(--pine-deep); }
+
+  /* FEATURE GRID */
+  .feature-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  }
+  .feature-card{
+    background: #FFFFFF; border: 1px solid var(--paper-line);
+    border-radius: 20px; padding: 40px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .feature-card:hover{ transform: translateY(-4px); box-shadow: 0 20px 40px rgba(11,46,35,0.08); }
+  .dark .feature-card{
+    background: #0F3B2C; border: 1px solid var(--dark-line);
+  }
+  .icon-badge{
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--pine); color: var(--lime);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 24px; margin-bottom: 24px;
+  }
+  .dark .icon-badge{ background: var(--lime); color: var(--pine-deep); }
+  .feature-card h3{ font-size: 22px; margin-bottom: 16px; color: var(--ink); }
+  .dark .feature-card h3{ color: var(--mint-white); }
+  .feature-card ul{ list-style:none; }
+  .feature-card li{
+    font-size: 15px; color: var(--ink-soft); padding: 9px 0 9px 22px; position: relative;
+    line-height: 1.5; border-top: 1px solid var(--paper-line);
+  }
+  .dark .feature-card li{ color: rgba(245,250,246,0.72); border-top: 1px solid var(--dark-line); }
+  .feature-card li:first-child{ border-top: none; padding-top: 0; }
+  .feature-card li::before{
+    content: '→'; position:absolute; left:0; color: var(--coral); font-weight: 700;
+  }
+  .dark .feature-card li::before{ color: var(--lime); }
+
+  /* PRICING */
+  .pricing-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; }
+  .price-card{
+    border-radius: 24px; padding: 44px; display:flex; flex-direction:column;
+  }
+  .price-card.free{ background: #FFFFFF; border: 1px solid var(--paper-line); }
+  .price-card.premium{ background: var(--pine); color: var(--mint-white); position: relative; overflow:hidden; }
+  .price-card.premium::after{
+    content: 'MOST POPULAR'; position:absolute; top: 28px; right: -38px;
+    background: var(--coral); color:#fff; font-size: 11px; font-weight: 800;
+    letter-spacing: 0.08em; padding: 6px 44px; transform: rotate(35deg);
+  }
+  .price-name{ font-size: 14px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 12px; }
+  .premium .price-name{ color: var(--lime); }
+  .price-amount{ font-family:'Fraunces', serif; font-size: 46px; margin-bottom: 28px; }
+  .price-amount span{ font-size: 16px; font-weight: 500; font-family: 'Inter', sans-serif; color: var(--ink-soft); }
+  .premium .price-amount span{ color: rgba(245,250,246,0.6); }
+  .price-card ul{ list-style:none; flex:1; margin-bottom: 32px; }
+  .price-card li{ font-size: 15px; padding: 11px 0; border-top: 1px solid var(--paper-line); position:relative; padding-left: 26px; color: var(--ink-soft); }
+  .premium li{ border-top: 1px solid var(--dark-line); color: rgba(245,250,246,0.82); }
+  .price-card li:first-child{ border-top:none; padding-top:0; }
+  .price-card li::before{ content:'✓'; position:absolute; left:0; color: var(--coral); font-weight:700; }
+  .premium li::before{ color: var(--lime); }
+  .price-cta{
+    text-align:center; padding: 15px; border-radius: 100px; font-weight: 700; font-size: 15px;
+  }
+  .free .price-cta{ background: var(--mint-white); border: 1.5px solid var(--pine); color: var(--pine); }
+  .premium .price-cta{ background: var(--lime); color: var(--pine-deep); }
+
+  /* CTA FOOTER */
+  .cta-footer{
+    background: linear-gradient(180deg, var(--pine-deep) 0%, #051912 100%);
+    color: var(--mint-white); text-align:center; padding: 130px 0;
+  }
+  .cta-footer h2{ font-size: clamp(36px, 6vw, 64px); max-width: 700px; margin: 0 auto 24px; color: var(--mint-white); }
+  .cta-footer p{ color: rgba(245,250,246,0.65); font-size: 18px; margin-bottom: 44px; }
+  .cta-footer .btn-primary{ font-size: 17px; padding: 18px 40px; }
+
+  footer{
+    background: var(--pine-deep); border-top: 1px solid var(--dark-line);
+    padding: 32px 0; text-align:center;
+  }
+  footer p{ color: rgba(245,250,246,0.45); font-size: 13.5px; }
+
+  @media (max-width: 760px){
+    .feature-grid, .pricing-grid{ grid-template-columns: 1fr; }
+    nav .links{ display:none; }
+    .price-card.premium::after{ top: 20px; right: -42px; }
+  }
+
+  /* CHAT WIDGET */
+  #chat-launcher{
+    position: fixed; bottom: 28px; right: 28px; z-index: 500;
+    width: 62px; height: 62px; border-radius: 50%;
+    background: var(--lime); color: var(--pine-deep);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 26px; border: none; cursor:pointer;
+    box-shadow: 0 12px 28px rgba(11,46,35,0.35);
+    transition: transform 0.2s ease;
+  }
+  #chat-launcher:hover{ transform: scale(1.06); }
+  #chat-launcher.hidden-launcher{ transform: scale(0); opacity:0; pointer-events:none; }
+
+  #chat-panel{
+    position: fixed; bottom: 28px; right: 28px; z-index: 500;
+    width: 380px; max-width: calc(100vw - 40px);
+    height: 560px; max-height: calc(100vh - 100px);
+    background: var(--mint-white);
+    border-radius: 20px; overflow:hidden;
+    box-shadow: 0 24px 60px rgba(11,46,35,0.35);
+    display:flex; flex-direction:column;
+    transform: translateY(24px) scale(0.97); opacity:0; pointer-events:none;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  #chat-panel.open{ transform: translateY(0) scale(1); opacity:1; pointer-events:all; }
+
+  #chat-panel .chat-head{
+    background: var(--pine); color: var(--mint-white);
+    padding: 18px 20px; display:flex; align-items:center; justify-content:space-between;
+  }
+  #chat-panel .chat-head .who{ display:flex; align-items:center; gap:12px; }
+  #chat-panel .chat-head .avatar{
+    width: 36px; height:36px; border-radius:50%; background: var(--lime);
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+  }
+  #chat-panel .chat-head h4{ font-family:'Inter',sans-serif; font-size:15px; font-weight:700; }
+  #chat-panel .chat-head p{ font-size:12px; color: rgba(245,250,246,0.65); margin-top:1px; }
+  #chat-close{
+    background:none; border:none; color: rgba(245,250,246,0.8); font-size:20px; cursor:pointer;
+    width:28px; height:28px;
+  }
+
+  #chat-messages{
+    flex:1; overflow-y:auto; padding: 18px 16px; display:flex; flex-direction:column; gap:12px;
+  }
+  .msg{ max-width: 84%; padding: 11px 15px; border-radius: 16px; font-size: 14.5px; line-height:1.5; }
+  .msg.bot{ background:#fff; border:1px solid var(--paper-line); align-self:flex-start; border-bottom-left-radius:4px; }
+  .msg.user{ background: var(--pine); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+  .msg.typing{ background:#fff; border:1px solid var(--paper-line); align-self:flex-start; border-bottom-left-radius:4px; display:flex; gap:4px; padding:14px 16px; }
+  .msg.typing span{ width:6px; height:6px; border-radius:50%; background: var(--ink-soft); animation: blink 1.2s infinite ease-in-out; }
+  .msg.typing span:nth-child(2){ animation-delay:0.2s; }
+  .msg.typing span:nth-child(3){ animation-delay:0.4s; }
+  @keyframes blink{ 0%,80%,100%{ opacity:0.25; } 40%{ opacity:1; } }
+
+  #chat-disclaimer{
+    font-size: 11px; color: var(--ink-soft); padding: 8px 16px; text-align:center;
+    border-top: 1px solid var(--paper-line); background:#fff;
+  }
+
+  #chat-input-row{
+    display:flex; gap:8px; padding: 14px; background:#fff; border-top: 1px solid var(--paper-line);
+  }
+  #chat-input{
+    flex:1; border: 1.5px solid var(--paper-line); border-radius: 100px;
+    padding: 11px 16px; font-size: 14px; font-family:'Inter',sans-serif; outline:none;
+  }
+  #chat-input:focus{ border-color: var(--pine); }
+  #chat-send{
+    background: var(--pine); color:#fff; border:none; width:42px; height:42px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; flex-shrink:0;
+  }
+  #chat-send:disabled{ opacity:0.5; cursor:default; }
+
+  @media (max-width: 480px){
+    #chat-panel{ right: 12px; bottom: 12px; }
+    #chat-launcher{ right: 20px; bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="pulse-progress"><div class="pulse-progress-fill" id="pulseFill"></div></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">Peak<span>Self</span></div>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#nutrition">Nutrition</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <a href="#pricing" class="cta">Get Started</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">● Your all-in-one app companion</div>
+    <h1>Reach your <em>peak self</em>,<br>one day at a time.</h1>
+    <p class="sub">Personalized health, fitness, nutrition & medical guidance — powered by an AI coach that's with you 24/7.</p>
+    <div class="btn-row">
+      <a href="#pricing" class="btn-primary">Start free today</a>
+      <a href="#features" class="btn-ghost">See how it works ↓</a>
+    </div>
+
+    <div class="pulse-wrap">
+      <svg class="pulse-line" viewBox="0 0 1000 70" preserveAspectRatio="none">
+        <path class="pulse-path" d="M0,35 L200,35 L230,10 L260,60 L290,35 L420,35 L450,15 L480,55 L510,35 L650,35 L680,5 L710,65 L740,35 L1000,35" />
+      </svg>
+    </div>
+
+    <div class="stat-strip">
+      <div><div class="num">30 min</div><div class="label">Daily guided workouts</div></div>
+      <div><div class="num">24/7</div><div class="label">AI coach availability</div></div>
+      <div><div class="num">3-in-1</div><div class="label">Doctor · Coach · Nutritionist</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="light" id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Core Features</span>
+      <h2>Move more, guess less.</h2>
+      <p>Two engines power your daily routine: a workout program that adapts to you, and an AI health chatbot that's always in your corner.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon-badge">🏃</div>
+        <h3>Keep your body active</h3>
+        <ul>
+          <li>Daily 30-minute home workout sessions</li>
+          <li>Guided sport movements, no gym required</li>
+          <li>Suitable for all fitness levels</li>
+          <li>Progress tracking & reminders</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge">🤖</div>
+        <h3>AI health chatbot</h3>
+        <ul>
+          <li>Acts as doctor, sport coach & nutrition expert</li>
+          <li>Personalised programs: weight loss / gain</li>
+          <li>Supports chronic conditions: diabetes, heart disease, pregnancies</li>
+          <li>Available 24/7 for instant guidance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="nutrition">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Healthy Eating, Made Easy</span>
+      <h2>Meals that fit your plan — not the other way around.</h2>
+      <p>Get a nutrition plan built around your goals, then order meals that already match it.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon-badge">🥗</div>
+        <h3>Personalised nutrition plan</h3>
+        <ul>
+          <li>Custom meal plans based on health goals</li>
+          <li>Adapted for diabetes, hypertension & more</li>
+          <li>Calorie tracking + macro guidance</li>
+          <li>Regular plan adjustments by your AI coach</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge">🍱</div>
+        <h3>Healthy meal delivery</h3>
+        <ul>
+          <li>Order healthy meals directly from the app</li>
+          <li>Restaurant partners with nutritious menus</li>
+          <li>Pay per meal, no commitment required</li>
+          <li>Every meal aligned with your nutrition plan</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="light" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Simple, Flexible Pricing</span>
+      <h2>Start free. Upgrade when you're ready.</h2>
+      <p>No pressure, no bundling — just the plan that fits where you are right now.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card free">
+        <div class="price-name">Free Access</div>
+        <div class="price-amount">$0</div>
+        <ul>
+          <li>Limited app features</li>
+          <li>Sample workouts</li>
+          <li>Basic chatbot access</li>
+        </ul>
+        <a href="#" class="price-cta">Get started free</a>
+      </div>
+      <div class="price-card premium">
+        <div class="price-name">Premium</div>
+        <div class="price-amount">Monthly fee<span> + meals</span></div>
+        <ul>
+          <li>Full AI chatbot — doctor, coach & nutritionist</li>
+          <li>Unlimited daily workout programmes</li>
+          <li>Personalised nutrition & health plans</li>
+          <li>Pay-per-meal healthy restaurant orders</li>
+        </ul>
+        <a href="#" class="price-cta">Go premium</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-footer">
+  <div class="wrap">
+    <h2>Reach your PeakSelf today.</h2>
+    <p>Your body, your plan, your pace — with an AI coach that never clocks out.</p>
+    <a href="#pricing" class="btn-primary">Start free today</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><p>© 2026 PeakSelf. Your all-in-one health companion.</p></div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+    document.getElementById('pulseFill').style.width = pct + '%';
+  });
+</script>
+
+<!-- AI Health Coach chat widget -->
+<button id="chat-launcher" aria-label="Open AI Health Coach">🤖</button>
+
+<div id="chat-panel">
+  <div class="chat-head">
+    <div class="who">
+      <div class="avatar">🤖</div>
+      <div>
+        <h4>PeakSelf Coach</h4>
+        <p>AI health & fitness guidance</p>
+      </div>
+    </div>
+    <button id="chat-close" aria-label="Close chat">✕</button>
+  </div>
+  <div id="chat-messages">
+    <div class="msg bot">Hi! I'm your PeakSelf AI coach. Ask me about workouts, nutrition, or healthy habits — I'm here 24/7.</div>
+  </div>
+  <div id="chat-disclaimer">General wellness guidance only — not a substitute for professional medical care.</div>
+  <div id="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Ask about fitness, food, habits…" autocomplete="off" />
+    <button id="chat-send" aria-label="Send">➤</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const launcher = document.getElementById('chat-launcher');
+  const panel = document.getElementById('chat-panel');
+  const closeBtn = document.getElementById('chat-close');
+  const messagesEl = document.getElementById('chat-messages');
+  const input = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
+
+  let history = []; // { role: 'user'|'assistant', content: '...' }
+  let isSending = false;
+
+  function openChat(){
+    panel.classList.add('open');
+    launcher.classList.add('hidden-launcher');
+    input.focus();
+  }
+  function closeChat(){
+    panel.classList.remove('open');
+    launcher.classList.remove('hidden-launcher');
+  }
+  launcher.addEventListener('click', openChat);
+  closeBtn.addEventListener('click', closeChat);
+
+  function addMessage(role, text){
+    const div = document.createElement('div');
+    div.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  function addTyping(){
+    const div = document.createElement('div');
+    div.className = 'msg typing';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  async function sendMessage(){
+    const text = input.value.trim();
+    if (!text || isSending) return;
+    isSending = true;
+    sendBtn.disabled = true;
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+    input.value = '';
+
+    const typingEl = addTyping();
+
+    try {
+      const res = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history })
+      });
+
+      if (!res.ok) throw new Error('Request failed: ' + res.status);
+      const data = await res.json();
+      typingEl.remove();
+
+      const reply = data.reply || "Sorry, I couldn't process that just now.";
+      addMessage('bot', reply);
+      history.push({ role: 'assistant', content: reply });
+    } catch (err) {
+      typingEl.remove();
+      addMessage('bot', "I'm having trouble connecting right now — please try again in a moment.");
+      console.error(err);
+    } finally {
+      isSending = false;
+      sendBtn.disabled = false;
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+})();
+</script>
+
+</body>
+</html>
